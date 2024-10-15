@@ -1,8 +1,19 @@
-﻿using ScreenSound.Banco;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using ScreenSound.Banco;
 using ScreenSound.Menus;
 using ScreenSound.Modelos;
+using Microsoft.Extensions.DependencyInjection;
 
-var context = new ScreenSoundContext();
+var builder1 = WebApplication.CreateBuilder(args);
+// Configuração da string de conexão ao banco de dados
+builder1.Services.AddDbContext<ScreenSoundContext>(options => options.UseSqlServer("Data Source=DESKTOP-KNM3SP8;Initial Catalog=ScreenBlazor;User ID=sa;Password=123456;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
+// Registro dos serviços necessários
+builder1.Services.AddScoped<DAL<Artista>>();
+
+
+var options = new DbContextOptions<ScreenSoundContext>();
+var context = new ScreenSoundContext(options); 
 var artistaDAL = new DAL<Artista>(context);
 
 Dictionary<int, Menu> opcoes = new();
